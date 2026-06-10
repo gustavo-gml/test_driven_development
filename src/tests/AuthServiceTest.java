@@ -28,23 +28,23 @@ public class AuthServiceTest {
 
     @Test
     void fazerLoginComSucesso() {
-        Usuario novoUsuario = new Usuario("Agabo", "agabo@email.com", "111.222.333-44", "senhaSegura", LocalDate.parse("1990-01-01"));
+        Usuario novoUsuario = new Usuario("Agabo", "agabo@email.com", "111.222.333-44", "Senha@123", LocalDate.parse("1990-01-01"));
         repository.salvar(novoUsuario);
 
         
-        String resultado = authService.fazerLogin("agabo@email.com", "senhaSegura");
+        String resultado = authService.fazerLogin("agabo@email.com", "Senha@123");
         assertEquals("Sucesso", resultado, "O login deveria ser realizado com sucesso.");
     }
 
     @Test
     void negarLoginComEmailNaoCadastrado() {
-        String resultado = authService.fazerLogin("naoexiste@email.com", "senha123");
+        String resultado = authService.fazerLogin("naoexiste@email.com", "Senha@123");
         assertEquals("Credenciais inválidas", resultado, "Deveria retornar erro para e-mail não cadastrado.");
     }
 
     @Test
     void negarLoginComSenhaIncorreta() {
-        Usuario novoUsuario = new Usuario("Agabo", "agabo@email.com", "111.222.333-44", "senhaCorreta", LocalDate.parse("1990-01-01"));
+        Usuario novoUsuario = new Usuario("Agabo", "agabo@email.com", "111.222.333-44", "Senha@123", LocalDate.parse("1990-01-01"));
         repository.salvar(novoUsuario);
 
         String resultado = authService.fazerLogin("agabo@email.com", "senhaErrada");
@@ -57,7 +57,7 @@ public class AuthServiceTest {
 
     @Test
     void devePrevenirSqlInjectionNoLogin() {
-        Usuario usuarioReal = new Usuario("Admin", "admin@email.com", "122.322.323-15", "senha123", LocalDate.parse("2026-06-05"));
+        Usuario usuarioReal = new Usuario("Admin", "admin@email.com", "122.322.323-15", "senha@123", LocalDate.parse("2026-06-05"));
         repository.salvar(usuarioReal);
 
        

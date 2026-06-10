@@ -63,28 +63,25 @@ public class UsuarioRepositoryTest {
    
     @Test
     void validarRegrasDeComplexidadeDaSenha() {
-        // Senha sem números e sem caractere especial
-        Usuario uFraco = new Usuario("Jose", "j1@email.com", "111.111.111-11", "justletters",
-                LocalDate.parse("2026-06-05"));
-        assertThrows(IllegalArgumentException.class, () -> repository.salvar(uFraco),
-                "Deveria barrar senha sem números/especiais.");
+        // Senha sem números e sem caractere especial explode na criação
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Usuario("Jose", "j1@email.com", "111.111.111-11", "justletters", LocalDate.parse("2026-06-05"));
+        }, "Deveria barrar senha sem números/especiais.");
 
         // Senha com menos de 8 caracteres
-        Usuario uCurto = new Usuario("Jose", "j2@email.com", "222.222.222-22", "123!", LocalDate.parse("2026-06-05"));
-        assertThrows(IllegalArgumentException.class, () -> repository.salvar(uCurto), "Deveria barrar senha curta.");
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Usuario("Jose", "j2@email.com", "222.222.222-22", "123!", LocalDate.parse("2026-06-05"));
+        }, "Deveria barrar senha curta.");
 
-        Usuario uComEspaco = new Usuario("Jose", "j3@email.com", "333.333.333-33", "Senha 123!",
-                LocalDate.parse("2026-06-05"));
-        assertThrows(IllegalArgumentException.class, () -> repository.salvar(uComEspaco),
-                "Deveria barrar senha com espaços.");
+        // Senha com espaços
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Usuario("Jose", "j3@email.com", "333.333.333-33", "Senha 123!", LocalDate.parse("2026-06-05"));
+        }, "Deveria barrar senha com espaços.");
 
-        // Senha contendo espaços coma as regras
-        Usuario uValido = new Usuario("Jose", "j4@email.com", "444.444.444-44", "Senha123!",
-                LocalDate.parse("2026-06-05"));
-        assertNotNull(repository.salvar(uValido),
-                "Deveria salvar com sucesso uma senha complexa.");
+        // Senha válida agora pode ser criada e salva
+        Usuario uValido = new Usuario("Jose", "j4@email.com", "444.444.444-44", "Senha@123", LocalDate.parse("2026-06-05"));
+        assertNotNull(repository.salvar(uValido), "Deveria salvar com sucesso uma senha complexa.");
     }
-
     @Test
     void fazerTrimNosEspacosDeEmailEUsuario() {
         Usuario usuarioComEspacos = new Usuario("  Jose Trim  ", "  trim@email.com  ", "555.555.555-55", "Senha123!",
@@ -105,15 +102,18 @@ public class UsuarioRepositoryTest {
         assertEquals("senha🚀🔥123", salvo.getSenha());
     }
 
+    
     @Test
     void barrarTextoQueExcedaLimiteMaximo() {
-        //String gigante
         String textLongo = "A".repeat(501);
 
-        Usuario nomeLongo = new Usuario(textLongo, "longo@email.com", "888.888.888-88", "Senha123!", LocalDate.parse("2026-06-05"));
-        assertThrows(IllegalArgumentException.class, () -> repository.salvar(nomeLongo), "Deveria barrar nome maior que 500 caracteres.");
+        // O erro agora é lançado direto no construtor
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Usuario(textLongo, "longo@email.com", "888.888.888-88", "Senha@123", LocalDate.parse("2026-06-05"));
+        }, "Deveria barrar nome maior que 500 caracteres.");
 
-        Usuario emailLongo = new Usuario("jose", textLongo, "888.888.888-88", "Senha123!", LocalDate.parse("2026-06-05"));
-        assertThrows(IllegalArgumentException.class, () -> repository.salvar(emailLongo), "Deveria barrar email maior que 500 caracteres.");
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Usuario("jose", textLongo, "888.888.888-88", "Senha@123", LocalDate.parse("2026-06-05"));
+        }, "Deveria barrar email maior que 500 caracteres.");
     }
 }
