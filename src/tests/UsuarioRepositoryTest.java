@@ -8,10 +8,10 @@ import main.repository.UsuarioRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 import java.time.LocalDate;
 
 public class UsuarioRepositoryTest {
+
     UsuarioRepository repository;
 
     @BeforeEach
@@ -22,8 +22,8 @@ public class UsuarioRepositoryTest {
     @Test
     void testAdicionarUsuario() {
 
-        Usuario novoUsuario = new Usuario("Matheus", "matheusgedesinho@gmail.com", "122.322.323-15",
-                LocalDate.parse("2026-06-05"));
+        // Adicionei a senha "SenhaDoMatheus123" no final
+        Usuario novoUsuario = new Usuario("Matheus", "matheusgedesinho@gmail.com", "122.322.323-15", java.time.LocalDate.parse("2000-01-01"), "SenhaDoMatheus123");
 
         Usuario usuarioSalvo = repository.salvar(novoUsuario);
 
