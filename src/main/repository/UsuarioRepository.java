@@ -2,15 +2,15 @@ package main.repository;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import main.models.Usuario;
 
 public class UsuarioRepository {
     private int countId = 1;
+  
     private List<Usuario> usuarios = new ArrayList<>();
 
     public Usuario salvar(Usuario u) throws IllegalArgumentException {
-
+        // Validações do José 
         if(u.getEmail() != null) u.setEmail(u.getEmail().trim());
         if(u.getNome() !=null) u.setNome(u.getNome().trim());
 
@@ -32,6 +32,7 @@ public class UsuarioRepository {
             throw new IllegalArgumentException();
         }
 
+        // Lógica limpa de salvamento
         u.setId(countId); // adiciona id automaticamente
         countId++; // incrementa o contador
 
@@ -67,27 +68,14 @@ public class UsuarioRepository {
         return null;
     }
 
-    public String fazerLogin(String email, String senha) {
-        //Trim no email para login flexivel
-        if(email != null) email = email.trim();
-
-        Usuario usuario = buscarPorEmail(email);
-        if (usuario == null) {
-            return "Credenciais inválidas";
-        }
-        if (usuario.getSenha().equals(senha)) {
-            return "Sucesso";
-        }
-        return "Credenciais inválidas";
-    }
-
+    
     private boolean validarComplexidadeDaSenha(String senha){
         if(senha.length() < 8 || senha.contains(" ")){
             return false;
         }
 
         boolean temNumero = senha.matches(".*\\d.*");
-        //Vericia se possui caracteres especiais ou fora da faixa Alfanumérica
+        // Verifica se possui caracteres especiais ou fora da faixa Alfanumérica
         boolean temEspecialOuEmoji = senha.matches(".*[^a-zA-Z0-9].*");
 
         return temNumero && temEspecialOuEmoji;

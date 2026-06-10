@@ -10,7 +10,13 @@ public class Usuario {
     private String senha;
     private LocalDate dataNascimento;
 
-    public Usuario(String nome, String email, String cpf, String senha, LocalDate dataNascimento) {
+    public Usuario(String nome, String email, String cpf, String senha, LocalDate dataNascimento) throws IllegalArgumentException{
+        if (!validarArrobaEPonto(email)) {
+            throw new IllegalArgumentException("Email invalido: e necessario inserir um arroba e um .");
+        }
+        if (!validarVazio(email,senha)) {
+            throw new IllegalArgumentException("Campos obrigatórios não podem estar vazios.");
+        }
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;
@@ -43,7 +49,10 @@ public class Usuario {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws IllegalArgumentException {
+        if (!validarArrobaEPonto(email)) {
+            throw new IllegalArgumentException("Email invalido: e necessario inserir um arroba e um .");
+        }
         this.email = email;
     }
     public String getCpf() {
@@ -61,6 +70,22 @@ public class Usuario {
     public LocalDate getDataNascimento() {return dataNascimento;}
 
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
+
+
+    private boolean validarArrobaEPonto(String email) {
+    int posicaoArroba = email.indexOf('@');
+    int posicaoPonto = email.indexOf('.', posicaoArroba); // Procura o ponto APÓS o arroba
+
+    return posicaoArroba >= 0 && posicaoPonto > posicaoArroba; 
+}
+    private boolean validarVazio(String email, String senha) {
+  
+    boolean emailInvalido = (email == null || email.isBlank());
+    boolean senhaInvalida = (senha == null || senha.isBlank());
+
+    
+    return !emailInvalido && !senhaInvalida;
+}
 
 
 }
