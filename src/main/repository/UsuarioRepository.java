@@ -10,35 +10,20 @@ public class UsuarioRepository {
     private List<Usuario> usuarios = new ArrayList<>();
 
     public Usuario salvar(Usuario u) throws IllegalArgumentException {
-        // Validações do José 
-        if(u.getEmail() != null) u.setEmail(u.getEmail().trim());
-        if(u.getNome() !=null) u.setNome(u.getNome().trim());
-
-        if(u.getNome() != null && u.getNome().length() > 500){
-            throw new IllegalArgumentException("O nome não pode exceder 500 caracteres.");
-        }
-        if(u.getEmail()!= null && u.getEmail().length() > 500){
-            throw new IllegalArgumentException("O e-mail não pode exceder 500 caracteres.");
-        }
-
-        if(u.getSenha() == null || !validarComplexidadeDaSenha(u.getSenha())){
-            throw new IllegalArgumentException("A senha não cumpre os requisitos de complexidade.");
-        }
-
+        // O repositório só checa duplicidade no "banco"
         if (verificarEmail(u.getEmail())) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("E-mail já cadastrado.");
         }
         if (verificarCpf(u.getCpf())) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("CPF já cadastrado.");
         }
 
-        // Lógica limpa de salvamento
-        u.setId(countId); // adiciona id automaticamente
-        countId++; // incrementa o contador
+        // Lógica puramente operacional de persistência
+        u.setId(countId); 
+        countId++; 
+        usuarios.add(u); 
 
-        usuarios.add(u); // adiciona na lista
-
-        return usuarios.getLast(); // retorna o que foi adicionado
+        return usuarios.getLast(); 
     }
 
     private boolean verificarEmail(String email) {
@@ -66,18 +51,5 @@ public class UsuarioRepository {
             }
         }
         return null;
-    }
-
-    
-    private boolean validarComplexidadeDaSenha(String senha){
-        if(senha.length() < 8 || senha.contains(" ")){
-            return false;
-        }
-
-        boolean temNumero = senha.matches(".*\\d.*");
-        // Verifica se possui caracteres especiais ou fora da faixa Alfanumérica
-        boolean temEspecialOuEmoji = senha.matches(".*[^a-zA-Z0-9].*");
-
-        return temNumero && temEspecialOuEmoji;
     }
 }

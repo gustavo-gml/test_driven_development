@@ -19,7 +19,7 @@ public class UsuarioRepositoryTest {
 
     @Test
     void testAdicionarUsuario() {
-        Usuario novoUsuario = new Usuario("Matheus", "matheusgedesinho@gmail.com", "122.322.323-15", "senha123",
+        Usuario novoUsuario = new Usuario("Matheus", "matheusgedesinho@gmail.com", "122.322.323-15", "senha@123",
                 LocalDate.parse("2026-06-05"));
 
         Usuario usuarioSalvo = repository.salvar(novoUsuario);
@@ -30,10 +30,10 @@ public class UsuarioRepositoryTest {
 
     @Test
     void criarEmailDuplicado() {
-        Usuario novoUsuario = new Usuario("Matheus", "matheusgedesinho@gmail.com", "122.322.323-15",
+        Usuario novoUsuario = new Usuario("Matheus", "matheusgedesinho@gmail.com", "122.322.323-15","senha@123",
                 LocalDate.parse("2026-06-05"));
 
-        Usuario novoUsuario2 = new Usuario("Mathias", "matheusgedesinho@gmail.com", "122.322.323-15",
+        Usuario novoUsuario2 = new Usuario("Mathias", "matheusgedesinho@gmail.com", "122.322.323-15","senha@321",
                 LocalDate.parse("2026-06-05"));
 
         repository.salvar(novoUsuario);
@@ -45,10 +45,10 @@ public class UsuarioRepositoryTest {
 
     @Test
     void criarCpfDuplicado() {
-        Usuario novoUsuario = new Usuario("Matheus", "matheusgedesinho@gmail.com", "122.322.323-15",
+        Usuario novoUsuario = new Usuario("Matheus", "matheusgedesinho@gmail.com", "122.322.323-15","senha@123",
                 LocalDate.parse("2026-06-05"));
 
-        Usuario novoUsuario2 = new Usuario("Mathias", "matheusgedesinho@gmail.com", "122.322.323-15",
+        Usuario novoUsuario2 = new Usuario("Mathias", "matheusgedesinho@gmail.com", "122.322.323-15","senha@321",
                 LocalDate.parse("2026-06-05"));
 
         repository.salvar(novoUsuario);
