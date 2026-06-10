@@ -3,7 +3,7 @@ package main.models;
 import java.time.LocalDate;
 
 public class Usuario {
-    private int id;
+    private Integer id;
     private String nome;
     private String email;
     private String cpf;
@@ -23,11 +23,11 @@ public class Usuario {
     public Usuario() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
