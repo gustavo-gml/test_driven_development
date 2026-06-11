@@ -10,6 +10,10 @@ public class Usuario {
     private String senha;
     private LocalDate dataNascimento;
 
+    // Novos atributos de segurança
+    private int tentativas = 0;
+    private boolean bloqueado = false;
+
     public Usuario(String nome, String email, String cpf, String senha, LocalDate dataNascimento) throws IllegalArgumentException {
         // 1. Aplica o trim preventivo para validar o texto já limpo
         String nomeLimpo = nome != null ? nome.trim() : null;
@@ -86,6 +90,26 @@ public class Usuario {
     public LocalDate getDataNascimento() {return dataNascimento;}
 
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
+
+    public boolean isBloqueado() {
+        return this.bloqueado;
+    }
+
+    public void setBloqueado(boolean bloqueado) {
+        this.bloqueado = bloqueado;
+    }
+
+    public int getTentativas() {
+        return this.tentativas;
+    }
+
+    public void setTentativas(int tentativas) {
+        this.tentativas = tentativas;
+    }
+
+    public void incrementarTentativas() {
+        this.tentativas++;
+    }
 
 
     private boolean validarArrobaEPonto(String email) {

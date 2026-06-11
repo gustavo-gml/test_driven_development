@@ -68,4 +68,22 @@ public class AuthServiceTest {
         String resultado = authService.fazerLogin(emailMalicioso, senhaQualquer);
         assertEquals("Credenciais inválidas", resultado, "O sistema não deve permitir o login com tentativa de injeção de SQL");
     }
+
+    @Test
+    void deveBloquearUsuarioAposTresTentativasErradas() {
+        // Criando com a ordem correta e senha forte
+        Usuario usuario = new Usuario("Tiago", "tiago@email.com", "000.000.000-00", "Senha@123", LocalDate.parse("2000-01-01"));
+        repository.salvar(usuario);
+
+        // Simulação de erros (usando o nosso authService)
+        authService.fazerLogin("tiago@email.com", "senha_errada_1");
+        authService.fazerLogin("tiago@email.com", "senha_errada_2");
+        authService.fazerLogin("tiago@email.com", "senha_errada_3");
+
+        // Busca na memoria o usuario atualizado para exibi-lo
+        Usuario usuarioAposErros = repository.buscarPorEmail("tiago@email.com");
+
+        // Junit valida se o estado mudou para bloqueado
+        assertTrue(usuarioAposErros.isBloqueado(), "O usuário deveria ser bloqueado após a terceira tentativa falha.");
+    }
 }
